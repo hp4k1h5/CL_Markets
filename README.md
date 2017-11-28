@@ -41,17 +41,19 @@ you should be able to run commands from the shell (see documentation and example
 #### Test Examples
 To see if things are working we can try
 
+`
 node stockCharts0.6.js --s=MSFT --i=M --z=m
   |       |             |           |     |______+
 run     filename      TICKER SYM  time interval  size of graph
+`
 
 or 
 
-
+`
 node stockCharts0.6.js --s=BRK.A --i=15 --z=l
   |       |             |           |     |______+
 run     filename      TICKER SYM  time interval  size of graph
-
+`
 you must provide a valid 1-4 letter ticker symbol but it will acommodate some deviation such as with different classes of stocks.
 This has not been tested with ADR's 
 This will not work for foreign markets or cyrpto currencies
