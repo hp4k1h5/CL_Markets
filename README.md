@@ -62,19 +62,18 @@ This will not work for foreign markets or cyrpto currencies
 ## DOCUMENTATION
 
 this package supports 3 command line options: --s, --i, --z
---s : Symbol/ticker Symbol- most US NYSE/NASDAQ listings supported
-      :default value : NONE (without a symbol it will not run)
---i : time Interval- arguments supported : M, 1, 5, 15, 30, 60
-      : M is for monthly data sets
-      : values 1, 5, 15, 30, 60 are for v minute data sets  
-      : default value : 15
---z : siZe of graph- arguments supported : s, m, l
-      dealing with large charts can sometimes result in overly large charts, i have to adjust the normPrice and minMaxEq eqautions
-      : default value : m
-
+| --s : | Symbol/ticker Symbol- most US NYSE/NASDAQ listings supported |
+|       |  :default value : NONE (without a symbol it will not run) |
+| --i : | time Interval- arguments supported : M, 1, 5, 15, 30, 60 |
+|       | : M is for monthly data sets |
+|       | : values 1, 5, 15, 30, 60 are for v minute data sets |
+|       | : default value : 15 |
+| --z : | siZe of graph- arguments supported : s, m, l |
+|       | : default value : m |
+note:  dealing with large charts can sometimes result in overly large charts, i have to adjust the normPrice and minMaxEq eqautions 
 it is configured to use 15min and m as defaults for interval and size respectively, however you must provide a ticker symbol to look up. 
 
-#### PLANS
+#### development plans
 The longterm plan is to build a small persistent cli app that can show realtime data in the console, possibly with multiple charts and tables runnings. Some of those plans probably need a less free data source so they will wait.
 In the short term, getting a small portfolio option going would be nice
 
