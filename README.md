@@ -61,6 +61,7 @@ This will not work for foreign markets or cyrpto currencies
 
 ## DOCUMENTATION
 
+```
 this package supports 3 command line options: --s, --i, --z
 | --s : | Symbol/ticker Symbol- most US NYSE/NASDAQ listings supported |
 |       |  :default value : NONE (without a symbol it will not run) |
@@ -70,6 +71,8 @@ this package supports 3 command line options: --s, --i, --z
 |       | : default value : 15 |
 | --z : | siZe of graph- arguments supported : s, m, l |
 |       | : default value : m |
+```
+
 note:  dealing with large charts can sometimes result in overly large charts, i have to adjust the normPrice and minMaxEq eqautions 
 it is configured to use 15min and m as defaults for interval and size respectively, however you must provide a ticker symbol to look up. 
 
