@@ -1,7 +1,7 @@
 # CL_Markets
 a node.js command line tool to view charts from US stock markets
 
-(screen shot)[img/rht15.png]
+![screen shot](img/rht15.png)
 
 ### LATEST VERSION: stockCharts0.9
 ##### DATE: 2017 11 28
@@ -63,8 +63,8 @@ node stockCharts0.7.js --s==X
 node stockCharts0.7.js --s=YHOO --i=5
 node stockCharts0.7.js --s=YHOO --i=60
 ```
-(screen shot)[img/rht15.png]
-(screen shot)[img/rhtM.png]
+![screen shot](img/rht15.png)
+![screen shot](img/rhtM.png)
 
 you must provide a valid 1-4 letter ticker symbol but it will acommodate some deviation such as with different classes of stocks.
 
