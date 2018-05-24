@@ -6,14 +6,19 @@
  * */
 
 // handle command line arguments
+let startTime = Date.now()
 const argv = require('yargs').argv
+let yargTime = Date.now()
+console.log( "yargTime ",yargTime-startTime )
 
 const sym = (argv.s).toUpperCase()
 const intv = (argv.i == null ? 15 : argv.i)
-const size = (argv.z == null ? 60 : argv.z)
+// chart size disabled for now
+//const size = (argv.z == null ? 'm' : argv.z)
 
 const api_key = require('./api_key.js')
-
+let apiTime = Date.now()
+console.log( "apiTime ",apiTime-startTime )
 // url builder 
 const  https = require('https')
 const  url = 'https://www.alphavantage.co/query?function=' 
@@ -22,8 +27,7 @@ const  url = 'https://www.alphavantage.co/query?function='
               : `TIME_SERIES_INTRADAY&symbol=${sym}&interval=${intv}min`) 
               + `&apikey=${api_key}`
 
-let graph_width = size
-console.log( " size", size)
+let graph_width = 65
 let graph_height = 25
 
 https.get(url, resp => {
@@ -33,9 +37,13 @@ https.get(url, resp => {
     process.exit()
   }
 
+      let getTime = Date.now()
+      console.log( "get time ",getTime-startTime )
   let data = ''
   resp.on('data', (datum) => {
     data += datum
+      getTime = Date.now()
+      console.log( "get time ",getTime-startTime )
   })
   resp.on('end', () => {
     let symbol,
@@ -62,7 +70,8 @@ https.get(url, resp => {
     // get min/max/time from time series 
     let low = Infinity,
         high = -low,
-        prices = [],
+        prices = [], 
+        openPrices = [],
         first = Infinity,
         unixTime
 
@@ -72,8 +81,10 @@ https.get(url, resp => {
       if (unixTime < first){
         first = unixTime
       }
+      let oPD = +priceData[t]['1. open']
       let pD = +priceData[t]['4. close']
       prices.push(pD)
+      openPrices.push(oPD)
       if (pD < low){
         low = pD
       }
@@ -122,8 +133,13 @@ https.get(url, resp => {
       y--
     }
     chart.forEach(r => console.log( r.join('')))
+      let chartTime = Date.now()
+      console.log( "chart time ",chartTime-startTime )
   })
 
 }).on('error', (err) => {
   console.error(err)
+
 })
+/*
+*/
