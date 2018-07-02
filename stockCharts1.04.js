@@ -118,22 +118,29 @@ function makePromise(url){
 }
 
 let graphData = require('./graphData.js').objArr
-let deftest = require('./tests/defaultTEST.js')
-let btctest = require('./tests/BTCdTEST.js') 
-//console.log( " test", test)
+let deftest = require('./tests/defaultTEST.js').obj
+let btctest = require('./tests/BTCdTEST.js').obj
+let googwtest = require('./tests/GOOGwTEST.js').obj
+let eurcadtest = require('./tests/EURCADsTEST.js')
+let arrData = graphData(eurcadtest) 
 
-console.log('symkey',  graphData(deftest))
-console.log('symkey',  graphData(btctest))
+console.log( arrData)
 
 function keepPromiseGraph(data){
- let json = JSON.parse(data)
-   console.log( json)
+  let json = JSON.parse(data)
+  let fxStr = 'Realtime Currency Exchange Rate'
+  if (json[fxStr]){
+    return json
+  }
+  else{
+    return graphData(data)
+  }
 }
 
 function repl(){
   rl.on('line', function(line){
     let url = parseLine(line)
-    console.log( "parsedLine ", url)
+    //console.log( "parsedLine ", url)
     //let dataPromise = makePromise(url)
     //let graph = dataPromise.then(full => keepPromiseGraph(full))
 //    dataPromise.then(() =>{
