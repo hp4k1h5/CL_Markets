@@ -122,10 +122,10 @@ function repl(){
     console.log( "parsedLine ", url)
     let dataPromise = makePromise(url)
     dataPromise.then(function(full){
-      console.log( full)
-    })
+    console.log( full)
     process.stdout.write(`\n${line}\n`)
     rl.prompt()
+    })
   }).on('end', () =>  repl()) 
 }
 rl.prompt()
