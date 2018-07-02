@@ -80,18 +80,18 @@ let parseLine = function(line){
     Symbol(ex)
   }
 
-  if (/:\w+/.test(line)){
-    let intv = line.match(/:(\w+)\b/)
-    if (series.curSer === 'digCur' && !/[idwm]/.test(intv[1])){
-      intv[1] = 'i'
+  if (/:\w+\b/.test(line)){
+    let intv = line.match(/:(\w+)\b/)[1].toLowerCase()
+    if (series.curSer === 'digCur' && !/[idwm]/.test(intv)){
+      intv = 'i'
     }
     else if (series.curSer === 'fx'){
-      intv[1] = 'rate'
+      intv = 'rate'
     }
-    else if (series.curSer === 'stocks' && /^(i|rate)$/.test(intv[1])){
-      intv[1] = 5
+    else if (series.curSer === 'stocks' && /^(i|rate)$/.test(intv)){
+      intv = 5
     }
-    timeFunc(null, intv[1])
+    timeFunc(null, intv)
   }
   if (/-\w+/){
     let size = line.match(/-(\w+)\b/)
@@ -115,6 +115,55 @@ function makePromise(url){
   })
   return promise
 }
+function objArr(json){
+  let symbol,
+    refresh,
+    interval, 
+    intKey, 
+    priceData 
+
+  try{
+  symbol = data['Meta Data']['2. Symbol']
+  refresh = data['Meta Data']['3. Last Refreshed']
+  interval =  data['Meta Data']['4. Interval'] || null
+
+  intKey = (interval !== null ? `Time Series (${interval})`
+                              : 'Monthly Time Series')
+  priceData = data[intKey]
+  console.log('sym:\tint:\n', (symbol + '\t'), intKey)
+
+  } catch(error) {
+  console.log( 'err: ', error)
+  console.log( 'data: ', data)
+  }
+
+  // get min/max/time from time series 
+  let low = Infinity,
+    high = -low,
+    prices = [], 
+    openPrices = [],
+    first = Infinity,
+    unixTime
+
+  for (let t in priceData){
+  // get first date in series
+  unixTime = Date.parse(t)
+  if (unixTime < first){
+    first = unixTime
+  }
+  let oPD = +priceData[t]['1. open']
+  let pD = +priceData[t]['4. close']
+  prices.push(pD)
+  openPrices.push(oPD)
+  if (pD < low){
+    low = pD
+  }
+  if (pD > high){
+    high = pD
+  }
+   
+  }
+}
 
 function repl(){
   rl.on('line', function(line){
@@ -122,10 +171,12 @@ function repl(){
     console.log( "parsedLine ", url)
     let dataPromise = makePromise(url)
     dataPromise.then(function(full){
-    console.log( full)
-    process.stdout.write(`\n${line}\n`)
-    rl.prompt()
+      let json = JSON.parse(full)
+      console.log( json)
+      process.stdout.write(`\n${line}\n`)
+      rl.prompt()
     })
+      rl.prompt()
   }).on('end', () =>  repl()) 
 }
 rl.prompt()
