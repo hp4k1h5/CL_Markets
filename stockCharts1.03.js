@@ -49,27 +49,28 @@ function timeFunc(s, i){
 }
 
 let parseLine = function(line){
-  if (/\$/.test(line)){
+  line = line.toUpperCase()
+  if (/\$\w+\b/.test(line)){
     rl.setPrompt('_∏_\n^_$; ')
     if (/^(i|rate)$/.test(series.curInt)){
       series.curInt = 5
     }
     series.curSer = 'stocks'
-    let stock = line.match(/\$(\w+)\b/)
-    stock = stock ? stock[1] : 'GOOG'
+    let stock = line.match(/\$(\w+)\b/)[1]
+    //stock = stock ? stock[1] : 'GOOG'
     Symbol('&symbol=' + stock)
   }
-  else if (/\¢/.test(line)){
+  else if (/\¢\w+\b/.test(line)){
     rl.setPrompt('_∏_\n^_¢; ')
     if (/^\d|rate$/.test(series.curInt)){
       series.curInt = 'i'
     }
     series.curSer = 'digCur'
-    let coin = line.match(/\¢(\w+)\b/)
-    coin = coin ? coin[1] : null
-    Symbol('&symbol=' + coin)
+    let coin = line.match(/\¢(\w+)(\b|\/)/)[1]
+    let market = /\/\w+/.test(line) ? line.match(/\/(\w+)/)[1] : 'USD'
+    Symbol('&symbol=' + coin + '&market=' + market)
   }
-  else if (/£/.test(line)){
+  else if (/£\w+\b/.test(line)){
     rl.setPrompt('_∏_\n^_£; ')
     series.curSer = 'fx'
     series.curInt = 'rate'
@@ -92,17 +93,40 @@ let parseLine = function(line){
     }
     timeFunc(null, intv[1])
   }
+  if (/-\w+/){
+    let size = line.match(/-(\w+)\b/)
+  }
+  
   return urlBuilder()
 }
+function makePromise(url){
+  let data = ''
+  let promise = new Promise(function(fill, fail){
+    https.get(url, resp => {
+      if (resp.statusCode !== 200){
+        fail(`err :: status :${resp.statusCode}`)
+      }
+      else{
+        resp.on('data', datum => {
+          data += datum
+        }).on('end', () => {fill(data)})
+      }
+    })
+  })
+  return promise
+}
 
-rl.prompt()
-repl()
 function repl(){
   rl.on('line', function(line){
-    let parsedLine = parseLine(line)
-    console.log( "parsedLine ",parsedLine )
-    
+    let url = parseLine(line)
+    console.log( "parsedLine ", url)
+    let dataPromise = makePromise(url)
+    dataPromise.then(function(full){
+      console.log( full)
+    })
     process.stdout.write(`\n${line}\n`)
     rl.prompt()
   }).on('end', () =>  repl()) 
 }
+rl.prompt()
+repl()
