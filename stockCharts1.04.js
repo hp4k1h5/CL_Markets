@@ -122,9 +122,6 @@ let deftest = require('./tests/defaultTEST.js').obj
 let btctest = require('./tests/BTCdTEST.js').obj
 let googwtest = require('./tests/GOOGwTEST.js').obj
 let eurcadtest = require('./tests/EURCADsTEST.js')
-let arrData = graphData(eurcadtest) 
-
-console.log( arrData)
 
 function keepPromiseGraph(data){
   let json = JSON.parse(data)
