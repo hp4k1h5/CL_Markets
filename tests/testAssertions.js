@@ -73,7 +73,7 @@ const assertions = {
   'btc json to array': function(){
     let a = objArr(tests.BTCd.data.obj)
     let e = tests.BTCd.data.arr
-    assert.strictEqual(a, e, `a ≠ e`)
+    assert.deepEqual(a,e, `a ≠ e`)
   }
 }
 
