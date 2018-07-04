@@ -1,4 +1,3 @@
-const apiKey = '&apikey=' + require('./api_key-PRIV.js')
 const https = require('https')
 const readline = require('readline')
 const rl = readline.createInterface({
@@ -97,9 +96,9 @@ let parseLine = function(line){
   if (/-\w+/){
     let size = line.match(/-(\w+)\b/)
   }
-  
   return urlBuilder()
 }
+
 function makePromise(url){
   let data = ''
   let promise = new Promise(function(fill, fail){
@@ -110,6 +109,7 @@ function makePromise(url){
       else{
         resp.on('data', datum => {
           data += datum
+          data = JSON.parse(data)
         }).on('end', () => {fill(data)})
       }
     })
@@ -122,16 +122,26 @@ let deftest = require('./tests/defaultTEST.js').obj
 let btctest = require('./tests/BTCdTEST.js').obj
 let googwtest = require('./tests/GOOGwTEST.js').obj
 let eurcadtest = require('./tests/EURCADsTEST.js')
+let notjson = 'this is not json'
+
+function testPromise(src){
+  return new Promise((fill, fail) => fill(src))
+}
+function keepPromiseJSON(data){
+  let json
+  try{
+    json = JSON.parse(data)
+  } catch (e){
+    console.error( e.message)
+  }
+  return json || data
+}
 
 function keepPromiseGraph(data){
-  let json = JSON.parse(data)
   let fxStr = 'Realtime Currency Exchange Rate'
-  if (json[fxStr]){
-    return json
-  }
-  else{
-    return graphData(data)
-  }
+  return data[fxStr] || typeof data === 'string' 
+    ? data 
+    : graphData(data)
 }
 
 function repl(){
@@ -139,11 +149,14 @@ function repl(){
     let url = parseLine(line)
     //console.log( "parsedLine ", url)
     //let dataPromise = makePromise(url)
-    //let graph = dataPromise.then(full => keepPromiseGraph(full))
-//    dataPromise.then(() =>{
-//      process.stdout.write(`\n${line}\n`)
-//      rl.prompt()
-//    })
+    let dataPromise = testPromise(notjson)
+    dataPromise.then(data => keepPromiseJSON(data))
+      .catch(console.error)
+    dataPromise.then(data =>{
+      keepPromiseGraph(data)
+      process.stdout.write(`\n${line}\n`)
+      rl.prompt()
+    }).catch(console.error)
   }).on('end', () =>  repl()) 
 }
 rl.prompt()
