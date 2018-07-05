@@ -31,7 +31,6 @@ const assertions = {
   },
   $msft: function(){
     let a = parseLine('$msft')
-    console.log( a)
     let e = tests.default.url
     assert(a === e, `${a} ≠ ${e}`)
   },
@@ -77,7 +76,6 @@ const assertions = {
   }
 }
 
-console.log('')
 Object.keys(assertions).forEach(a => {
   try{
     assertions[a]()
