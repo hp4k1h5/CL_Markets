@@ -109,7 +109,7 @@ function runGraphTests(){
       ? (series.curSer = tests[t]['curSer'],
         series.curInt = tests[t]['curInt'],
         console.log( graphArr(tests[t]['data']['obj'], series))
-      )
+        )
       : (series.curSer = 'fx',
         console.log(graphArr(tests[t]['data'], series))
         )
