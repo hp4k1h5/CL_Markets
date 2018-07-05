@@ -57,7 +57,7 @@ function keepPromiseGraph(json){
   let fxStr = 'Realtime Currency Exchange Rate'
   return json[fxStr] || typeof json === 'string' 
     ? json 
-    : graphArr(json, 'bar')
+    : graphArr(json, series.curSer, 'bar', 'l')
 }
 
 function repl(){
@@ -65,11 +65,12 @@ function repl(){
     let url = parseLine(line)
     //console.log( "parsedLine ", url)
     //let dataPromise = makePromise(url) //String
-    let dataPromise = testPromise(btctest)
+    let dataPromise = testPromise(deftest)
 // commented out for testing
 //      .then(data => keepPromiseJSON(data), console.error)
       .then(json => keepPromiseGraph(json), console.error)
-      .then(arr => console.log( arr), console.error)
+      .then(console.log, console.error)
+      //.then(arr => console.log( arr), console.error)
       
   //}).catch(console.error)
 
