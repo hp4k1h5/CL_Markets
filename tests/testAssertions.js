@@ -8,18 +8,34 @@ let tests = {
   default: {
     url: 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&symbol=MSFT&apikey=FKDNYO8JH1TTETIP',
     data: require('./defaultTEST.js'),
+    curSer: 'stocks',
+    curInt: 5,
+    curTyp: 'bar',
+    curVol: true
   },
   GOOGw:{
     url: 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=GOOG&apikey=FKDNYO8JH1TTETIP',
-    data: require('./GOOGwTEST.js')
+    data: require('./GOOGwTEST.js'),
+    curSer: 'stocks',
+    curInt: 'w',
+    curTyp: 'bar',
+    curVol: true
   },
   BTCd: {
     url: 'https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=USD&apikey=FKDNYO8JH1TTETIP',
-    data: require('./BTCdTEST.js') 
+    data: require('./BTCdTEST.js'),
+    curSer: 'digCur',
+    curInt: 'd',
+    curTyp: 'bar',
+    curVol: true
   },
   USDCADs:{
     url: 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=CAD&apikey=FKDNYO8JH1TTETIP',
-    data: require('./EURCADsTEST.js')
+    data: require('./USDCADsTEST.js'),
+    curSer: 'fx',
+    curInt: 'rate',
+    curTyp: 'bar',
+    curVol: true
   }
 }
 
@@ -76,13 +92,28 @@ const assertions = {
   }
 }
 
-Object.keys(assertions).forEach(a => {
-  try{
-    assertions[a]()
-    console.log(`${a} : pass ✅`)
-  } catch(e){
-    console.error(`${a} : fail ❌\n${e} ERROR`)
-  }
-})
+function runTests(){
+  Object.keys(assertions).forEach(a => {
+    try{
+      assertions[a]()
+      console.log(`${a} : pass ✅`)
+    } catch(e){
+      console.error(`${a} : fail ❌\n${e} ERROR`)
+    }
+  })
+}
 
-process.exit(0)
+function runGraphTests(){
+  Object.keys(tests).forEach(t => {
+    tests[t]['data']['obj'] 
+      ? (series.curSer = tests[t]['curSer'],
+        series.curInt = tests[t]['curInt'],
+        console.log( graphArr(tests[t]['data']['obj'], series))
+      )
+      : (series.curSer = 'fx',
+        console.log(graphArr(tests[t]['data'], series))
+        )
+  })
+}
+runTests()
+runGraphTests()

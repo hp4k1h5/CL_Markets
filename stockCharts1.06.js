@@ -54,10 +54,11 @@ function keepPromiseJSON(data){
 }
 
 function keepPromiseGraph(json){
-  let fxStr = 'Realtime Currency Exchange Rate'
-  return json[fxStr] || typeof json === 'string' 
+  //let fxStr = 'Realtime Currency Exchange Rate'
+  //return  json[fxStr] || typeof json === 'string' 
+  return series.curSeries = 'fx'
     ? json 
-    : graphArr(json, series.curSer, 'bar', 'l')
+    : graphArr(json, series.curSer, 'bar')
 }
 
 function repl(){
