@@ -10,7 +10,7 @@ let tests = {
     data: require('./defaultTEST.js'),
     curSer: 'stocks',
     curInt: 5,
-    curTyp: 'bar',
+    curTyp: 'line',
     curVol: true
   },
   GOOGw:{
@@ -18,7 +18,7 @@ let tests = {
     data: require('./GOOGwTEST.js'),
     curSer: 'stocks',
     curInt: 'w',
-    curTyp: 'bar',
+    curTyp: 'line',
     curVol: true
   },
   BTCd: {
@@ -26,7 +26,7 @@ let tests = {
     data: require('./BTCdTEST.js'),
     curSer: 'digCur',
     curInt: 'd',
-    curTyp: 'bar',
+    curTyp: 'line',
     curVol: true
   },
   USDCADs:{
@@ -108,6 +108,7 @@ function runGraphTests(){
     tests[t]['data']['obj'] 
       ? (series.curSer = tests[t]['curSer'],
         series.curInt = tests[t]['curInt'],
+        series.curTyp = tests[t]['curTyp'],
         console.log( graphArr(tests[t]['data']['obj'], series))
         )
       : (series.curSer = 'fx',
