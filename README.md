@@ -1,7 +1,7 @@
 # CL_Markets
 a node.js command line tool to view charts from stocks, crypto currencies, and currency spot data
 
-![screen shot](img/rht15.png)
+![screen shot](msft.png)
 
 ## LATEST VERSION: CLMarkets.js
 #### DATE: 2018 07 6
