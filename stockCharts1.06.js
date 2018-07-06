@@ -24,7 +24,6 @@ function makePromise(url){
       resp.on('data', datum => {
         let headers = resp.headers
         data += datum
-        data = JSON.parse(data)
       }).on('end', () => {fill(data)})
     }).on('error', e => fail(e.message))
   })
@@ -54,32 +53,30 @@ function keepPromiseJSON(data){
 }
 
 function keepPromiseGraph(json){
-  return series.curSeries === 'fx'
-    ? json 
-    : graphArr(json, series)
+  if (json['Realtime Currency Exchange Rate']){
+    console.log( 'rcer')
+    return JSON.stringify(json['Realtime Currency Exchange Rate']).split(',').join('\n')
+  } 
+  return  graphArr(json, series)
 }
 
 function repl(){
   rl.on('line', function(line){
     let url = parseLine(line)
-    console.log( "parsedLine ", url)
-    //let dataPromise = makePromise(url) //String
-    let dataPromise = testPromise(deftest)
+    let dataPromise = makePromise(url)
+      .then(data => keepPromiseJSON(data), console.error)
       .then(json => keepPromiseGraph(json), console.error)
-      .then(console.log, console.error)
-      //.then(console.log, console.error)
-//      //.then(arr => console.log( arr), console.error)
-      
-  //}).catch(console.error)
+      .then(chart => process.stdout.write(`${chart}`), console.error)
+    .then(() => {
+      rl.setPrompt(series.curSer === 'stocks' 
+        ? ('_∏_\n^_$; ')
+        : series.curSer === 'digCur'
+        ? ('_∏_\n^_¢; ')
+        : ('_∏_\n^_£; ')
+      )
+      rl.prompt()
+    })
 
-//      .then(data => keepPromiseJSON(data), console.error)
-//    dataPromise.then(data => keepPromiseJSON(data))
-//      .catch(console.error)
-//    dataPromise.then(data =>{
-//      keepPromiseGraph(data)
-//      process.stdout.write(`\n${line}\n`)
-  //    rl.prompt()
-    //}).catch(console.error)
   }).on('end', () =>  repl()) 
 }
 
