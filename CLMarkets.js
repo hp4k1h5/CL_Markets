@@ -15,7 +15,6 @@ let deftest = require('./tests/defaultTEST.js').obj
 //let btctest = require('./tests/BTCdTEST.js').obj
 //let googwtest = require('./tests/GOOGwTEST.js').obj
 //let eurcadtest = require('./tests/USDCADsTEST.js')
-//let notjson = 'this is not json'
 
 function makePromise(url){
   let data = ''
@@ -34,12 +33,11 @@ function testPromise (src){
     return new Promise((fill, fail) => {fill(src)})
 }
 
-function keepPromiseTest(data){
+function getWindowDimensions(){
   let termWidth = process.stdout.columns
   let termHeight = process.stdout.rows
   let termWindow = makeWindow(termWidth, termHeight)
-  let graph = keep
-  return null
+  return [termWidth, termHeight, termWindow]
 }
 
 function keepPromiseJSON(data){
@@ -54,7 +52,6 @@ function keepPromiseJSON(data){
 
 function keepPromiseGraph(json){
   if (json['Realtime Currency Exchange Rate']){
-    console.log( 'rcer')
     return JSON.stringify(json['Realtime Currency Exchange Rate']).split(',').join('\n')
   } 
   return  graphArr(json, series)

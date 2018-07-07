@@ -18,7 +18,7 @@ let tests = {
     data: require('./GOOGwTEST.js'),
     curSer: 'stocks',
     curInt: 'w',
-    curTyp: 'bar',
+    curTyp: 'line',
     curVol: true
   },
   BTCd: {
@@ -26,7 +26,7 @@ let tests = {
     data: require('./BTCdTEST.js'),
     curSer: 'digCur',
     curInt: 'd',
-    curTyp: 'OHLC',
+    curTyp: 'line',
     curVol: true
   },
   USDCADs:{
